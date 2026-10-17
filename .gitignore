@@ -1,0 +1,37 @@
+node_modules/
+dist/
+test-output/
+plugins/*/*.sdPlugin/
+plugins/*/.profile-build/
+
+# The editor companion will have its own repository.
+plugins/vscode/
+
+# Local data and credentials must never enter the source repository.
+backups/
+memory/
+CLAUDE.md
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+*.streamDeckPlugin
+*.streamDeckProfile
+*.zip
+__pycache__/
+
+# Publish only the current generic previews, not historical personal layouts.
+docs/images/*
+!docs/images/all-keys-animation.gif
+!docs/images/controls-animation.gif
+!docs/images/folders-settings.png
+!docs/images/open-app-credentials-settings.png
+!docs/images/windows-daily-toolkit-logo.png
+!docs/images/website-folder-vivid.gif
+!docs/images/website-folder-colourful.gif
+!docs/images/website-folder-vivid.png
+!docs/images/website-folder-colourful.png
+!docs/images/website-folder-settings.png

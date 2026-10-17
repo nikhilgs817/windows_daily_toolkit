@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Windows Daily Toolkit settings</title>
+	<link rel="stylesheet" href="pi.css" />
+	<script src="icons.js"></script>
+	<script src="pi.js"></script>
+</head>
+<body>
+	<!-- App picker -->
+	<section id="sec-app" hidden>
+		<h2>App</h2>
+		<div class="row">
+			<label for="appSearch">Choose app</label>
+			<div class="grow">
+				<div class="inline">
+					<input id="appSearch" list="appList" placeholder="Type to search installed apps…" autocomplete="off" />
+					<button id="appRefresh" title="Reload the list of installed apps">↻</button>
+				</div>
+				<datalist id="appList"></datalist>
+				<div id="appStatus" class="hint">Loading installed apps…</div>
+			</div>
+		</div>
+		<div class="row" id="appChosenRow" hidden>
+			<label>Selected</label>
+			<div class="grow inline"><span id="appChosen" class="chip"></span><button id="appClear">Use default</button></div>
+		</div>
+		<details id="appAdvanced">
+			<summary>Advanced: use a path, command or link instead</summary>
+			<div class="row">
+				<label for="target">Path / command</label>
+				<div class="grow">
+					<input id="target" placeholder="C:\Program Files\App\app.exe  ·  notepad  ·  myapp://" />
+					<div class="hint">Used only when no app is selected above. %USERPROFILE%-style variables work.</div>
+				</div>
+			</div>
+			<div class="row">
+				<label for="args">Arguments</label>
+				<input id="args" class="grow" placeholder="Optional, e.g. --new-window" />
+			</div>
+		</details>
+	</section>
+
+	<section id="sec-credentials" hidden>
+		<h2>App credentials</h2>
+		<div class="row">
+			<label for="credentialUsername">Username</label>
+			<input id="credentialUsername" class="grow" autocomplete="off" spellcheck="false" maxlength="512" placeholder="Username or email" />
+		</div>
+		<div class="row">
+			<label for="credentialPassword">Password</label>
+			<div class="grow password-field">
+				<input type="password" id="credentialPassword" autocomplete="new-password" spellcheck="false" maxlength="4096" placeholder="Enter a password" />
+				<button id="passwordEye" type="button" class="password-eye" title="Show password" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path id="passwordEyeSlash" d="m3 3 18 18" hidden/></svg></button>
+			</div>
+		</div>
+		<div class="row">
+			<label for="credentialAutofill">Autofill</label>
+			<div class="grow"><input type="checkbox" id="credentialAutofill" checked /> <span class="hint">Fill a compatible desktop login form after opening the app. Review and submit the login yourself.</span></div>
+		</div>
+		<div class="row">
+			<label></label>
+			<div class="grow inline"><button id="saveCredentials" type="button">Save credentials</button><button id="clearCredentials" type="button" class="link">Clear</button></div>
+		</div>
+		<div id="credentialStatus" class="hint pad" role="status" aria-live="polite">Optional. Passwords are encrypted for your Windows user account.</div>
+	</section>
+
+	<!-- Hand-off to a companion plugin (Daily Ops VS Code key) -->
+	<section id="sec-handoff" hidden>
+		<h2>Keys</h2>
+		<div class="row">
+			<label for="showKeys">Switch keys</label>
+			<div class="grow"><input type="checkbox" id="showKeys" checked /> <span class="hint">After opening, show the <b id="handoffName"></b> keys (needs the Daily Ops – VS Code v2 plugin). From the Apps page too.</span></div>
+		</div>
+	</section>
+
+	<!-- VS Code: Back key -->
+	<section id="sec-back" hidden>
+		<h2>Switching keys</h2>
+		<div class="row">
+			<label for="autoFollow">Follow focus</label>
+			<div class="grow"><input type="checkbox" id="autoFollow" checked /> <span class="hint">Show the VS Code keys whenever VS Code is in front, and the main keys when another window is.</span></div>
+		</div>
+		<div class="row">
+			<label for="returnOnClose">When VS Code closes</label>
+			<div class="grow"><input type="checkbox" id="returnOnClose" checked /> <span class="hint">Go back to the main keys</span></div>
+		</div>
+		<div class="hint pad">Press this key to go back to your main keys at any time.</div>
+	</section>
+
+	<!-- VS Code: custom shortcut -->
+	<section id="sec-shortcut" hidden>
+		<h2>Shortcut</h2>
+		<div class="row">
+			<label for="shortcut">Keys</label>
+			<div class="grow">
+				<input id="shortcut" placeholder="Ctrl+Shift+P  ·  F5  ·  Ctrl+K Ctrl+S" />
+				<div class="hint">Use + between keys. Use a space between the parts of a two-step shortcut.</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- VS Code: custom palette command -->
+	<section id="sec-command" hidden>
+		<h2>Command</h2>
+		<div class="row">
+			<label for="command">Command Palette</label>
+			<div class="grow">
+				<input id="command" placeholder="Git: Sync  ·  Docker: Compose Up  ·  Terminal: Kill All Terminals" />
+				<div class="hint">Type it exactly as it appears in VS Code's Command Palette (Ctrl+Shift+P).</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="sec-vscinfo" hidden>
+		<h2>VS Code</h2>
+		<div class="hint pad">Brings VS Code to the front and runs this command. Change the look below.</div>
+	</section>
+
+	<!-- Folder -->
+	<section id="sec-folder" hidden>
+		<h2 id="folderTitle">Folder</h2>
+		<div class="row">
+			<label for="folderPath">Folder path</label>
+			<div class="grow">
+				<input id="folderPath" placeholder="C:\Users\you\Documents\Projects" />
+				<div class="hint" id="folderHint">Open the folder in File Explorer, click its address bar (or press Alt+D), copy the full path, and paste it above. Example: C:\Users\you\Documents. Paths such as %USERPROFILE%\Downloads also work.</div>
+			</div>
+		</div>
+		<div class="row" id="folderNameRow" hidden>
+			<label for="folderNameLabel">Button label</label>
+			<div class="grow"><label class="check"><input type="checkbox" id="folderNameLabel" /> Use the folder name</label><div class="hint">The Label field in Look can still override this.</div></div>
+		</div>
+	</section>
+
+	<!-- Website -->
+	<section id="sec-website" hidden>
+		<h2>Website</h2>
+		<div class="row">
+			<label for="url">URL</label>
+			<input id="url" class="grow" placeholder="https://example.com" />
+		</div>
+		<div class="row">
+			<label for="browser">Open in</label>
+			<select id="browser" class="grow">
+				<option value="default">Default browser</option>
+				<option value="chrome">Google Chrome</option>
+			</select>
+		</div>
+	</section>
+
+	<!-- Volume -->
+	<section id="sec-volume" hidden>
+		<h2>Volume</h2>
+		<div class="row">
+			<label for="step">Step per press</label>
+			<select id="step" class="grow">
+				<option value="2">2%</option>
+				<option value="4">4%</option>
+				<option value="6" selected>6% (default)</option>
+				<option value="10">10%</option>
+				<option value="20">20%</option>
+			</select>
+		</div>
+		<div class="row">
+			<label for="repeat">Hold to repeat</label>
+			<div class="grow"><input type="checkbox" id="repeat" checked /> <span class="hint">Keep the key held to keep changing the volume</span></div>
+		</div>
+	</section>
+
+	<!-- Display -->
+	<section id="sec-display" hidden>
+		<h2>Second display</h2>
+		<div class="row">
+			<label for="mode">Mode</label>
+			<select id="mode" class="grow"></select>
+		</div>
+		<div class="hint pad">Same as Windows <b>Win + P</b>. "Off" stops using the second screen. Most monitors then go to standby.</div>
+	</section>
+
+	<!-- Screenshot -->
+	<section id="sec-shot" hidden>
+		<h2>Screenshot</h2>
+		<div class="gest">
+			<div><b>Tap</b><span>Select an area</span></div>
+			<div><b>Double-tap</b><span>Active window</span></div>
+			<div><b>Hold <span id="shotHoldLabel">1 s</span></b><span>All screens</span></div>
+		</div>
+		<div class="row">
+			<label for="shotHold">Hold time</label>
+			<select id="shotHold" class="grow">
+				<option value="0.5">0.5 seconds</option>
+				<option value="1" selected>1 second (default)</option>
+				<option value="1.5">1.5 seconds</option>
+				<option value="2">2 seconds</option>
+				<option value="3">3 seconds</option>
+			</select>
+		</div>
+		<div class="row">
+			<label for="shotFolder">Save to</label>
+			<div class="grow">
+				<input id="shotFolder" placeholder="Pictures\Screenshots (default)" />
+				<div class="hint">A folder path. Leave empty for your Pictures\Screenshots folder.</div>
+			</div>
+		</div>
+		<div class="row">
+			<label for="shotSave">Save a file</label>
+			<div class="grow"><input type="checkbox" id="shotSave" checked /> <span class="hint">PNG named with the date and time</span></div>
+		</div>
+		<div class="row">
+			<label for="shotClipboard">Copy</label>
+			<div class="grow"><input type="checkbox" id="shotClipboard" checked /> <span class="hint">Put the picture on the clipboard, ready to paste (area snips are always copied)</span></div>
+		</div>
+	</section>
+
+	<section id="sec-desktop" hidden>
+		<h2>Show Desktop</h2>
+		<div class="hint pad">Press to show your desktop. Press again to bring your windows back.</div>
+	</section>
+
+	<!-- Configurable monitor control -->
+	<section id="sec-screen" hidden>
+		<h2>Monitor Control</h2>
+		<div class="row">
+			<label for="screenPick">Monitor</label>
+			<div class="grow">
+				<div class="inline">
+					<select id="screenPick"></select>
+					<button id="screenRefresh" title="Look for screens again">↻</button>
+				</div>
+				<div id="screenStatus" class="hint">Looking for screens…</div>
+			</div>
+		</div>
+		<div class="row">
+			<label for="sleep">Sleep the monitor</label>
+			<div class="grow"><input type="checkbox" id="sleep" checked /> <span class="hint">When turning off, also put the monitor itself to sleep (DDC/CI), and wake it when turning on. Monitors without DDC/CI are just disconnected.</span></div>
+		</div>
+		<div class="hint pad">The key shows what a press will do: <b style="color:#ff7a7a">red TURN OFF</b> while the screen is on, <b style="color:#5ee08f">green TURN ON</b> while it is off. Off = disconnected in Windows (windows move to your other screens). The main display can be turned off when another screen is active. The last active screen stays on.</div>
+	</section>
+
+	<!-- Apps folder / Back -->
+	<section id="sec-apps" hidden>
+		<h2>Apps page</h2>
+		<div class="hint pad">Opens the <b>Apps</b> page: a Back key plus your app keys. To add an app, open the <b>Apps</b> profile in the Stream Deck app and drag <b>Open App…</b> (or any key) onto an empty slot. Apps with their own keys (VS Code) switch to them; the others keep you on the Apps page.</div>
+	</section>
+	<section id="sec-websites" hidden>
+		<h2>Website Folder</h2>
+		<div class="hint pad">Opens your editable <b>Websites</b> page. Add <b>Open Website…</b> keys in the Stream Deck editor and enter each URL. Keep the Back key to return to your main keys.</div>
+		<div class="row"><label></label><button id="openWebsites" type="button">Open Websites</button></div>
+	</section>
+	<section id="sec-navback" hidden>
+		<h2>Back</h2>
+		<div class="hint pad">Returns to your main keys from the Apps or Websites collection.</div>
+		<div class="row"><label></label><button id="returnMain" type="button">Return to main keys</button></div>
+	</section>
+
+	<!-- Keyboard -->
+	<section id="sec-keys" hidden>
+		<h2>Keyboard</h2>
+		<div class="hint pad" id="keysHint"></div>
+	</section>
+
+	<!-- Monitor gestures (apps, folders, websites) -->
+	<section id="sec-monitor" hidden>
+		<h2>Which monitor</h2>
+		<div class="gest">
+			<div><b>Tap</b><span>Monitor 1</span></div>
+			<div><b>Double-tap</b><span>Monitor 2</span></div>
+			<div><b>Hold <span id="holdLabel">3 s</span></b><span>Monitor 3</span></div>
+		</div>
+		<div class="row">
+			<label for="gestures">Use gestures</label>
+			<div class="grow"><input type="checkbox" id="gestures" checked /> <span class="hint">Off = a press just opens it, wherever Windows decides</span></div>
+		</div>
+		<div class="row">
+			<label for="holdSeconds">Hold time</label>
+			<select id="holdSeconds" class="grow">
+				<option value="1">1 second</option>
+				<option value="1.5">1.5 seconds</option>
+				<option value="2">2 seconds</option>
+				<option value="3" selected>3 seconds (default)</option>
+				<option value="5">5 seconds</option>
+			</select>
+		</div>
+		<div class="row">
+			<label for="monitorOrder">Monitor numbers</label>
+			<div class="grow">
+				<select id="monitorOrder">
+					<option value="windows">Same numbers as Windows Display settings (default)</option>
+					<option value="primary">My main display, then left → right</option>
+					<option value="left">The leftmost display, then left → right</option>
+				</select>
+				<div class="hint">Applies to all keys.</div>
+				<div id="monitorList" class="mons"></div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Look -->
+	<section id="sec-look">
+		<h2>Look</h2>
+		<div class="look">
+			<div class="preview-wrap"><div id="preview" class="preview"></div><button id="refreshIcon" class="link" hidden>↻ Refresh icon</button><button id="resetLook" class="link">Reset look</button></div>
+			<div class="grow">
+				<div class="row tight" id="styleRow">
+					<label>Style</label>
+					<div class="grow">
+						<div class="seg" id="styleSeg">
+							<button data-style="real" id="styleReal">App icon</button>
+							<button data-style="pro" id="stylePro">Pro</button>
+							<button data-style="neon">Colourful</button>
+							<button data-style="vivid">Vivid</button>
+						</div>
+						<div class="hint" id="styleHint"></div>
+					</div>
+				</div>
+				<div class="row tight">
+					<label for="iconLabel">Label</label>
+					<div class="grow inline">
+						<input id="iconLabel" maxlength="14" placeholder="" />
+						<label class="check"><input type="checkbox" id="hideLabel" /> Hide</label>
+					</div>
+				</div>
+				<div class="row tight" id="pictureRow">
+					<label>Picture</label>
+					<div class="grow inline">
+						<button id="pickImage">Use my own picture…</button>
+						<button id="removeImage" hidden>Remove picture</button>
+						<input type="file" id="imageFile" accept="image/png,image/jpeg,image/gif,image/svg+xml,image/webp,image/bmp" hidden />
+					</div>
+				</div>
+				<div class="row tight" id="motionRow" hidden>
+					<label for="animate">Animation</label>
+					<div class="grow"><label class="check"><input type="checkbox" id="animate" checked /> Gentle loop</label></div>
+				</div>
+			</div>
+		</div>
+		<div id="artPickers">
+			<div class="sub">Colour</div>
+			<div id="themes" class="themes"></div>
+			<div class="sub">Icon</div>
+			<div id="glyphs" class="glyphs"></div>
+		</div>
+	</section>
+</body>
+</html>

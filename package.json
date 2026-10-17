@@ -1,0 +1,36 @@
+{
+  "name": "windows-daily-toolkit",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Windows Daily Toolkit — everyday Windows controls for Elgato Stream Deck",
+  "scripts": {
+    "build": "node plugins/dailyops/gen.mjs && rollup -c",
+    "build:dailyops": "node plugins/dailyops/gen.mjs && rollup -c --environment PLUGIN:dailyops",
+    "test": "node plugins/dailyops/harness.mjs && node tools/clean.mjs",
+    "test:ui": "node tools/verify-monitor-ui.mjs",
+    "test:animation": "node tools/verify-animation.mjs",
+    "test:native": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/verify-native-display.ps1",
+    "test:credentials": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/verify-credentials.ps1 && node tools/verify-credential-transport.mjs",
+    "validate": "streamdeck validate plugins/dailyops/com.dailyops.v2.sdPlugin",
+    "pack": "node tools/clean.mjs && streamdeck pack plugins/dailyops/com.dailyops.v2.sdPlugin --output dist --force"
+  },
+  "keywords": [],
+  "author": "Daily Ops",
+  "license": "MIT",
+  "devDependencies": {
+    "@elgato/cli": "^1.10.2",
+    "@elgato/streamdeck": "^3.0.2",
+    "@resvg/resvg-js": "^2.6.2",
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/node": "^22.20.5",
+    "fflate": "^0.8.3",
+    "playwright": "^1.64.1",
+    "rollup": "^4.64.5",
+    "tslib": "^2.8.1",
+    "typescript": "5.9"
+  },
+  "private": true
+}
