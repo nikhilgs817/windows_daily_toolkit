@@ -264,6 +264,14 @@ public static class DailyOpsWin {
 		uint pid; GetWindowThreadProcessId(h, out pid);
 		try { return Process.GetProcessById((int)pid).ProcessName; } catch { return ""; }
 	}
+	public static string ForegroundIdentity() {
+		IntPtr h = GetForegroundWindow(); uint pid;
+		if (h == IntPtr.Zero) return "\n\n0";
+		GetWindowThreadProcessId(h, out pid);
+		try { Process p = Process.GetProcessById((int)pid); string path = ""; try { path = p.MainModule.FileName; } catch { }
+			return p.ProcessName + "\n" + path + "\n" + pid.ToString();
+		} catch { return "\n\n0"; }
+	}
 
 	// Brings the most recent window of any of the named processes to the front. Returns false if none is running.
 	public static bool Activate(string names) {
@@ -293,10 +301,12 @@ public static class DailyOpsWin {
 			string last = null;
 			while (true) {
 				try {
-					string n = ForegroundProcess();
-					if (n != last) {
-						last = n;
+					string identity = ForegroundIdentity();
+					string n = identity.Split('\n')[0];
+					if (identity != last) {
+						last = identity;
 						Console.Out.WriteLine("0\tfg\t" + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(n)));
+						Console.Out.WriteLine("0\tfgdetail\t" + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(identity)));
 						Console.Out.Flush();
 					}
 				} catch { }

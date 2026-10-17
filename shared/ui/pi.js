@@ -23,7 +23,10 @@
 	function handoffName() {
 		if (!APP_KINDS.includes(kind)) return "";
 		const chosen = [settings.appName, settings.appId, settings.target].filter(Boolean).join(" ");
-		if (chosen) return VSCODE_RE.test(chosen) ? "VS Code" : "";
+		if (chosen) {
+			if (VSCODE_RE.test(chosen)) return "VS Code";
+			for (const [pattern, name] of [[/chatgpt|OpenAI\.(ChatGPT|Codex)/i, "ChatGPT"], [/\bclaude\b/i, "Claude"], [/thinkorswim/i, "thinkorswim"], [/Fidelity Trader\+|68D72461-B3DB-4FE2-AE47-50EF0FD7254F/i, "Fidelity Trader+"]]) if (pattern.test(chosen)) return name;
+		}
 		return "";
 	}
 	let globalSettings = {};
@@ -68,13 +71,14 @@
 			if (actionUuid.startsWith(prefix)) { kind = tag + actionUuid.slice(prefix.length); break; }
 		}
 		settings = (ai.payload && ai.payload.settings) || {};
+		if (window.DailyOpsCompanion && actionUuid.startsWith(window.DailyOpsCompanion.uuid + ".")) kind = "comp-" + actionUuid.slice(window.DailyOpsCompanion.uuid.length + 1);
 
 		ws = new WebSocket("ws://127.0.0.1:" + port);
 		ws.onopen = () => {
 			ws.send(JSON.stringify({ event: registerEvent, uuid: piUuid }));
 			if (APP_KINDS.includes(kind)) requestApps();
 			if (MONITOR_KINDS.includes(kind)) sendToPlugin({ event: "getScreens" });
-			if (LAUNCH_KINDS.includes(kind) || kind === "vsc-back") ws.send(JSON.stringify({ event: "getGlobalSettings", context: piUuid }));
+			if (LAUNCH_KINDS.includes(kind) || kind === "vsc-back" || window.DailyOpsCompanion) ws.send(JSON.stringify({ event: "getGlobalSettings", context: piUuid }));
 		};
 		ws.onmessage = (e) => {
 			let m;
@@ -86,6 +90,7 @@
 				globalSettings = m.payload.settings || {};
 				$("monitorOrder").value = globalSettings.monitorOrder === "left" || globalSettings.monitorOrder === "primary" ? globalSettings.monitorOrder : "windows";
 				$("autoFollow").checked = globalSettings.autoFollow !== false;
+				$("companionFollow").checked = globalSettings.autoFollow !== false;
 				$("returnOnClose").checked = globalSettings.returnOnClose !== false;
 				if (LAUNCH_KINDS.includes(kind)) requestMonitors();
 			} else if (m.event === "sendToPropertyInspector" && m.payload) {
@@ -297,6 +302,23 @@
 
 	function build() {
 		const show = (id, on) => ($(id).hidden = !on);
+		const companion = window.DailyOpsCompanion;
+		const definition = companion?.commands?.find((c) => "comp-" + c.id === kind);
+		show("sec-companion", !!definition);
+		if (definition) {
+			$("companionTitle").textContent = companion.name;
+			$("companionDescription").textContent = definition.description;
+			$("companionShortcutRow").hidden = definition.id === "back" || definition.id === "focus";
+			$("companionShortcutHint").hidden = definition.id === "back" || definition.id === "focus";
+			$("companionShortcut").placeholder = definition.shortcut || "Use the built-in control";
+			$("companionBack").hidden = definition.id !== "back";
+			$("companionFollowRow").hidden = definition.id !== "back";
+			$("companionFollow").addEventListener("change", () => { globalSettings.autoFollow = $("companionFollow").checked; if (ws && ws.readyState === 1) ws.send(JSON.stringify({event:"setGlobalSettings",context:piUuid,payload:globalSettings})); });
+			$("companionShow").addEventListener("click", () => sendToPlugin({event:"companionShow"}));
+			$("companionBack").addEventListener("click", () => sendToPlugin({event:"companionBack"}));
+			let shortcutTimer;
+			$("companionShortcut").addEventListener("input", () => { clearTimeout(shortcutTimer); shortcutTimer = setTimeout(() => { set("shortcut", $("companionShortcut").value.trim()); save(); }, 350); });
+		}
 		const isApp = APP_KINDS.includes(kind);
 		show("sec-app", isApp);
 		show("sec-credentials", kind === "app");
@@ -421,7 +443,7 @@
 		// Look
 		const realCapable = REAL_CAPABLE.includes(kind);
 		$("styleReal").hidden = !realCapable;
-		$("stylePro").hidden = kind.indexOf("vsc-") !== 0;
+		$("stylePro").hidden = kind.indexOf("vsc-") !== 0 && !window.DailyOpsCompanion;
 		$("styleReal").textContent = kind === "folder" || kind === "downloads" ? "Folder icon" : kind === "website" ? "Site icon" : "App icon";
 		for (const b of document.querySelectorAll("#styleSeg button")) {
 			b.addEventListener("click", () => {
@@ -498,6 +520,7 @@
 		setVal("url", s.url);
 		setVal("iconLabel", s.iconLabel);
 		setVal("shortcut", s.shortcut);
+		setVal("companionShortcut", s.shortcut);
 		setVal("command", s.command);
 		if (kind === "app") {
 			if (!credentialDirty) setVal("credentialUsername", s.credentialUsername);

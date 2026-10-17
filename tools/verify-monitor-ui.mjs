@@ -13,7 +13,7 @@ const output = join(root, "test-output");
 mkdirSync(output, { recursive: true });
 const server = createServer((req, res) => {
 	const name = new URL(req.url, "http://localhost").pathname.slice(1) || "pi.html";
-	if (!["pi.html", "pi.js", "pi.css", "icons.js"].includes(name)) { res.writeHead(404).end(); return; }
+	if (!["pi.html", "pi.js", "pi.css", "icons.js", "companion.js"].includes(name)) { res.writeHead(404).end(); return; }
 	res.setHeader("Content-Type", ({ ".html": "text/html", ".js": "text/javascript", ".css": "text/css" })[extname(name)]);
 	res.end(readFileSync(join(ui, name)));
 });

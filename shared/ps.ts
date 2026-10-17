@@ -52,7 +52,9 @@ class PowerShellHost {
 			if (!existsSync(file)) return;
 			const lines = readFileSync(file, "utf8").split("\n").filter(Boolean);
 			for (; seen < lines.length; seen++) {
-				const [type, data = ""] = lines[seen].split("\t");
+				const [type, raw = ""] = lines[seen].split("\t");
+				let data = raw;
+				if (raw.startsWith("json:")) { try { const value = JSON.parse(raw.slice(5)); if (typeof value === "string") data = value; } catch { /* keep malformed fixture data inert */ } }
 				this.#emit({ type, data });
 			}
 		}, 50).unref();

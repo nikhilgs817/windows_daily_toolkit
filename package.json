@@ -9,6 +9,7 @@
     "test": "node plugins/dailyops/harness.mjs && node tools/clean.mjs",
     "test:ui": "node tools/verify-monitor-ui.mjs",
     "test:animation": "node tools/verify-animation.mjs",
+    "test:companions": "node tools/verify-companion-routing.mjs && powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/verify-app-control.ps1",
     "test:native": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/verify-native-display.ps1",
     "test:credentials": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/verify-credentials.ps1 && node tools/verify-credential-transport.mjs",
     "validate": "streamdeck validate plugins/dailyops/com.dailyops.v2.sdPlugin",

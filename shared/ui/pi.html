@@ -5,6 +5,7 @@
 	<title>Windows Daily Toolkit settings</title>
 	<link rel="stylesheet" href="pi.css" />
 	<script src="icons.js"></script>
+	<script src="companion.js"></script>
 	<script src="pi.js"></script>
 </head>
 <body>
@@ -71,7 +72,7 @@
 		<h2>Keys</h2>
 		<div class="row">
 			<label for="showKeys">Switch keys</label>
-			<div class="grow"><input type="checkbox" id="showKeys" checked /> <span class="hint">After opening, show the <b id="handoffName"></b> keys (needs the Daily Ops – VS Code v2 plugin). From the Apps page too.</span></div>
+			<div class="grow"><input type="checkbox" id="showKeys" checked /> <span class="hint">After opening, show the <b id="handoffName"></b> keys. Install the matching companion plugin. Works from the Apps page too.</span></div>
 		</div>
 	</section>
 
@@ -256,6 +257,14 @@
 	</section>
 
 	<!-- Keyboard -->
+	<section id="sec-companion" hidden>
+		<h2 id="companionTitle">App control</h2>
+		<div id="companionDescription" class="hint pad"></div>
+		<div class="row" id="companionShortcutRow"><label for="companionShortcut">Shortcut</label><input id="companionShortcut" class="grow" placeholder="Use the built-in control" /></div>
+		<div id="companionShortcutHint" class="hint pad">Optional override, for example Ctrl+Shift+N. Match the shortcut configured in your app.</div>
+		<div class="row" id="companionFollowRow" hidden><label for="companionFollow">Follow focus</label><div class="grow"><input id="companionFollow" type="checkbox" checked /> <span class="hint">Automatically show these keys when this app is in front. Requires Windows Daily Toolkit 2.6 or later.</span></div></div>
+		<div class="row"><label></label><button id="companionShow" type="button">Show app keys</button><button id="companionBack" type="button" hidden>Return to main</button></div>
+	</section>
 	<section id="sec-keys" hidden>
 		<h2>Keyboard</h2>
 		<div class="hint pad" id="keysHint"></div>

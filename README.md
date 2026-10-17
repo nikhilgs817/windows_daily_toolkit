@@ -2,7 +2,7 @@
 
 ![Windows Daily Toolkit logo: blue toolbox with a white Windows mark, wrench and gear](docs/images/windows-daily-toolkit-logo.png)
 
-Customizable Windows controls for Elgato Stream Deck. Version **2.5.0.0** provides 13 visible animated actions for apps, websites, folders, monitors and everyday desktop controls.
+Customizable Windows controls for Elgato Stream Deck. Version **2.6.0.0** provides 13 visible animated actions for apps, websites, folders, monitors and everyday desktop controls.
 
 ![Animated Windows Daily Toolkit keys](docs/images/all-keys-animation.gif)
 
@@ -32,6 +32,14 @@ Launcher gestures select monitor 1 with a tap, monitor 2 with a double-tap and m
 ![Folders settings](docs/images/folders-settings.png)
 
 ![Website Folder settings](docs/images/website-folder-settings.png)
+
+## App companion profiles
+
+Optional companion plugins provide app-specific controls for [VS Code](https://github.com/nikhilgs817/streamdeck_vscode), [ChatGPT](https://github.com/nikhilgs817/streamdeck_chatgpt), [Claude](https://github.com/nikhilgs817/streamdeck_claude), [thinkorswim](https://github.com/nikhilgs817/streamdeck_thinkorswim) and [Fidelity Trader+](https://github.com/nikhilgs817/streamdeck_fidelity_trader_plus). Install the desired companion and accept its editable profile. Select that app with Open App and leave Switch keys enabled.
+
+The deck follows the foreground app, whether you opened it from Apps or switched to it elsewhere. Direct app changes restore the main profile before showing the next companion. Back returns to the main keys and prevents an immediate switch back until you leave and return to the app. The Back key in each companion offers Follow focus. Companion profiles share animated looks and colour themes; they are separate plugins and repositories.
+
+App recognition uses process names and, for packaged apps and thinkorswim's Java runtime, executable paths. A local named pipe coordinates profile changes. No app content, credentials or account data crosses that channel. Only installed, connected companions can be selected.
 
 ## Optional app credentials
 
@@ -83,6 +91,7 @@ npx tsc --noEmit
 npm test
 npm run test:ui
 npm run test:animation
+npm run test:companions
 npm run test:native
 npm run test:credentials
 npm run validate

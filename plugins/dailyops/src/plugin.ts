@@ -6,6 +6,7 @@ import { credentialBinding } from "../../../shared/credentials.js";
 import { ALL_ACTIONS } from "./actions.js";
 import { refreshScreens, screenNumber, screens } from "./screens.js";
 import { leaveApps, openWebsites } from "./nav.js";
+import { initCompanions } from "./companions.js";
 
 streamDeck.logger.setLevel("info");
 const log = streamDeck.logger.createScope("plugin");
@@ -101,6 +102,7 @@ void ps.run("warm", [], 60_000).then((r) => log.info(`warm-up: ${r.status} ${r.m
 streamDeck.settings.onDidReceiveGlobalSettings((ev) => Object.assign(globals, ev.settings));
 
 await streamDeck.connect();
+initCompanions();
 try {
 	Object.assign(globals, await streamDeck.settings.getGlobalSettings());
 } catch (e) {

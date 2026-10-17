@@ -3,20 +3,17 @@ import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { log } from "../../../shared/base.js";
 import { ps } from "../../../shared/ps.js";
+import { COMPANIONS } from "../../../shared/companion-specs.js";
+export { COMPANIONS };
 
 /** Name of the bundled Apps page — must match the manifest's Profiles[].Name exactly. */
 export const APPS_PROFILE = "profiles/Apps";
 export const WEBSITES_PROFILE = "profiles/Websites";
 
 /** Companion plugins: apps that have their own keys. `match` is tested against the app chosen on a key. */
-export const COMPANIONS = [
-	{
-		uuid: "com.dailyops.vscode.v2",
-		name: "VS Code",
-		kinds: ["vscode"],
-		match: /visual studio code|\bvs ?code\b|vscodium|\bcode( - insiders)?\.exe\b|Microsoft\.VisualStudioCode/i,
-	},
-];
+type Manager = { available: (uuid: string) => boolean; show: (uuid: string, device: string) => Promise<void>; restore: (device: string) => Promise<void> };
+let manager: Manager | undefined;
+export function setCompanionManager(value: Manager): void { manager = value; }
 
 /** Which companion plugin (if any) owns the keys for the app this key opens. */
 export function companionFor(kind: string, s: { appName?: string; appId?: string; target?: string }): string | undefined {
@@ -64,6 +61,7 @@ export async function openWebsites(deviceId: string): Promise<void> {
 }
 
 async function openCollection(deviceId: string, profile: string): Promise<void> {
+	await manager?.restore(deviceId);
 	// Flatten collection-to-collection navigation, so Back always reaches the original main keys.
 	if (inAppsPage.has(deviceId)) await leaveApps(deviceId, false);
 	await streamDeck.profiles.switchToProfile(deviceId, profile);
@@ -87,6 +85,7 @@ export async function leaveApps(deviceId: string, release = true): Promise<void>
 export async function handOff(uuid: string, deviceId: string): Promise<void> {
 	if (!companionInstalled(uuid)) return;
 	if (inApps(deviceId)) await leaveApps(deviceId, false);
+	if (manager?.available(uuid)) { await manager.show(uuid, deviceId); return; }
 	const r = await ps.run("url", [companionUrl(uuid, "show", deviceId)]);
 	if (r.status !== "ok") log.warn(`hand-off to ${uuid} failed: ${r.message}`);
 }

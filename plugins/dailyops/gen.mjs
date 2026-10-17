@@ -9,7 +9,7 @@ import { toolkitCategorySvg, toolkitLogoSvg } from "./brand.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const sd = join(here, "com.dailyops.v2.sdPlugin");
-const VERSION = "2.5.0.0";
+const VERSION = "2.6.0.0";
 const PRODUCT_NAME = "Windows Daily Toolkit";
 
 /** id → [Name in action list, tooltip] — order = order in the Stream Deck action list. */

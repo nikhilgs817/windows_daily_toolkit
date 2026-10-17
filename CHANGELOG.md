@@ -1,5 +1,12 @@
 # Changes
 
+## Windows Daily Toolkit 2.6.0.0 — 2026-10-17
+
+- Added coordinated automatic profile switching for separately installed VS Code, ChatGPT, Claude, thinkorswim and Fidelity Trader+ companions. Generic Open App remains the launcher; there are no app-specific launcher presets.
+- One foreground watcher reports verified executable identity, including thinkorswim's own Java runtime. A local named-pipe coordinator serializes restore/show operations across plugins, supports per-app Follow focus, and keeps Back from immediately reopening the same app profile.
+- Added a shared companion runtime with animated Colourful/Vivid/Pro keys, 29 colour themes, custom artwork and editable shortcuts. Native app controls run in a bounded hidden worker and recheck the foreground identity before each keyboard chord or accessible menu action.
+- Companion implementations live in separate repositories. Main plugin defaults and bundled Apps/Websites profiles remain generic.
+
 ## Windows Daily Toolkit 2.5.0.0 — 2026-10-16
 
 - Added Website Folder as a plugin action with the approved animated Vivid ocean folder/globe. It opens the bundled editable Websites profile, with Back and an unconfigured Open Website key. Personal URLs and artwork are not shipped as defaults. Settings include Open Websites for editing the collection.
