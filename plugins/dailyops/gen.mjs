@@ -9,7 +9,7 @@ import { toolkitCategorySvg, toolkitLogoSvg } from "./brand.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const sd = join(here, "com.dailyops.v2.sdPlugin");
-const VERSION = "2.6.0.0";
+const VERSION = "2.6.1.0";
 const PRODUCT_NAME = "Windows Daily Toolkit";
 
 /** id → [Name in action list, tooltip] — order = order in the Stream Deck action list. */
@@ -60,6 +60,11 @@ const APPS_LAYOUT = {
 const APPS_PROFILE = "profiles/Apps"; // must match nav.ts APPS_PROFILE
 buildProfile({ sd, uuid: "com.dailyops.v2", pluginName: PRODUCT_NAME, version: VERSION, profile: APPS_PROFILE, title: "Apps", layout: APPS_LAYOUT, actions: ACTIONS });
 buildProfile({ sd, uuid: "com.dailyops.v2", pluginName: PRODUCT_NAME, version: VERSION, profile: "profiles/Websites", title: "Websites", layout: { "0,0": "back", "1,0": "website" }, actions: ACTIONS });
+buildProfile({ sd, uuid: "com.dailyops.v2", pluginName: PRODUCT_NAME, version: VERSION, profile: "profiles/WindowsDailyToolkit", title: "Windows Daily Toolkit", layout: {
+	"0,0": "appsfolder", "1,0": "websitefolder", "2,0": "screenshot", "3,0": "showdesktop", "4,0": "volup",
+	"0,1": "monitorcontrol", "1,1": "copy", "2,1": "paste", "3,1": "downloads", "4,1": "voldown",
+	"0,2": "app", "1,2": "website",
+}, actions: ACTIONS });
 
 const manifest = {
 	$schema: "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
@@ -77,7 +82,7 @@ const manifest = {
 	Software: { MinimumVersion: "7.1" },
 	OS: [{ Platform: "windows", MinimumVersion: "10" }],
 	Nodejs: { Version: "20" },
-	Profiles: [APPS_PROFILE, "profiles/Websites"].map((Name) => ({ Name, DeviceType: 0, Readonly: false, DontAutoSwitchWhenInstalled: true, AutoInstall: true })),
+	Profiles: [APPS_PROFILE, "profiles/Websites", "profiles/WindowsDailyToolkit"].map((Name) => ({ Name, DeviceType: 0, Readonly: false, DontAutoSwitchWhenInstalled: true, AutoInstall: true })),
 	Actions: ACTIONS.map(([id, name, tip]) => ({
 		Name: name,
 		UUID: `com.dailyops.v2.${id}`,

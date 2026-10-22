@@ -1,4 +1,5 @@
 import streamDeck from "@elgato/streamdeck";
+import { mkdirSync, writeFileSync } from "node:fs";
 import type { JsonObject, JsonValue } from "@elgato/utils";
 import { REGISTRY, globals } from "../../../shared/base.js";
 import { ps } from "../../../shared/ps.js";
@@ -107,4 +108,11 @@ try {
 	Object.assign(globals, await streamDeck.settings.getGlobalSettings());
 } catch (e) {
 	log.warn(`global settings: ${(e as Error).message}`);
+}
+// The installer checks this process-bound receipt after the SDK connection succeeds.
+try {
+	mkdirSync(new URL("../logs/", import.meta.url), { recursive: true });
+	writeFileSync(new URL("../logs/installer-ready.json", import.meta.url), JSON.stringify({ pid: process.pid, readyAt: new Date().toISOString() }), "utf8");
+} catch {
+	log.warn("Installer startup receipt could not be written");
 }

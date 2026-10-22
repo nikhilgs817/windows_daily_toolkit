@@ -2,17 +2,25 @@
 
 ![Windows Daily Toolkit logo: blue toolbox with a white Windows mark, wrench and gear](docs/images/windows-daily-toolkit-logo.png)
 
-Customizable Windows controls for Elgato Stream Deck. Version **2.6.0.0** provides 13 visible animated actions for apps, websites, folders, monitors and everyday desktop controls.
+Customizable Windows controls for Elgato Stream Deck. Version **2.6.1.0** provides 13 visible animated actions for apps, websites, folders, monitors and everyday desktop controls, with a double-click Windows installer.
 
 ![Animated Windows Daily Toolkit keys](docs/images/all-keys-animation.gif)
 
 ## Install
 
-Requires Windows 10 or later and Stream Deck 7.1 or later. Build the installer from source using the Development instructions below, then open `dist/com.dailyops.v2.streamDeckPlugin` and accept the installation in Stream Deck. Drag actions from the Windows Daily Toolkit category onto your deck and select a key to configure it.
+1. Download **WindowsDailyToolkit-Installer-2.6.1.0.zip** from [the latest release](https://github.com/nikhilgs817/windows_daily_toolkit/releases/latest).
+2. Right-click the ZIP → **Extract All**, then open its **WindowsDailyToolkit-Installer** folder.
+3. Double-click **Install-WindowsDailyToolkit.cmd** and wait for the success message. Stream Deck restarts automatically.
+
+No Git, Node.js or build steps are needed. The installer checks prerequisites, backs up the current setup, preserves existing keys/settings, and adds missing compatible starter/Apps/Websites layouts. On a detected compatible 15-key deck, choose **Windows Daily Toolkit** from Stream Deck's profile dropdown to begin. You can also drag actions from its category onto any supported deck and select a key to configure it.
+
+Requires Windows 10/11 64-bit and Stream Deck 7.1+. If Stream Deck needs installing/updating, the script uses the official Elgato package through Windows Package Manager; Windows may request administrator approval. [Full installation, updates, troubleshooting and recovery instructions](docs/INSTALL.md).
+
+Already downloaded this repository? Double-click its **Install-WindowsDailyToolkit.cmd** to retrieve and install the prebuilt release. For manual installation, open **com.dailyops.v2.streamDeckPlugin** from the release and accept Stream Deck's prompts.
 
 Previously named Daily Ops. The internal plugin ID is unchanged, so existing generic keys continue working.
 
-The bundled editable **Apps** and **Websites** profiles each start with Back and an unconfigured launcher, with space for your shortcuts. Their layouts target a 15-key deck. Accept the profiles when offered to use the collection buttons.
+The bundled editable **Apps** and **Websites** profiles each start with Back and an unconfigured launcher, with space for your shortcuts. A **Windows Daily Toolkit** starter profile provides everyday controls. These layouts target a 15-key deck. The script imports missing layouts for compatible detected devices; manual installation offers them through Stream Deck. Existing layouts are kept.
 
 ## Actions
 
@@ -78,6 +86,8 @@ Monitor labels use Windows display-topology metadata. This resolves source-numbe
 
 Credentials and Windows controls run locally. Website icon retrieval sends the website hostname to a public favicon service and may fetch an icon directly from that website; results are cached. Opening a website or app uses the destination you configure. The plugin does not send credentials to an external service.
 
+The installer downloads the matching public release from GitHub when its package is not included locally, and may use Windows Package Manager for the official Elgato software prerequisite. Installer backups and logs stay on your PC and are not uploaded.
+
 ## Development
 
 This repository contains Windows Daily Toolkit and the shared artwork, settings and Windows helpers it needs. The optional VS Code companion is maintained separately and is not required to build or use this plugin. Use Node.js 20 or later and npm.
@@ -96,11 +106,15 @@ npm run test:native
 npm run test:credentials
 npm run validate
 npm run pack
+npm run build:installer
+npm run test:installer
 ```
 
-The build writes `plugins/dailyops/com.dailyops.v2.sdPlugin/`; packaging writes `dist/com.dailyops.v2.streamDeckPlugin`. Generated plugin folders, installers and dependencies are excluded from Git.
+The build writes `plugins/dailyops/com.dailyops.v2.sdPlugin/`; packaging writes `dist/com.dailyops.v2.streamDeckPlugin`. `build:installer` bundles that package, its checksum manifest, the PowerShell installer, CMD launcher and instructions into `dist/WindowsDailyToolkit-Installer-2.6.1.0.zip`. Run `pack` before building the installer. The installer test suite exercises isolated first-install, update, repeat-install, path-validation and rollback cases; it does not operate your real Stream Deck. Generated plugin folders, installers and dependencies are excluded from Git. Publish the installer ZIP, plugin package and `dist/installer-manifest.json` together as release assets.
 
 The browser inspector checks use installed Edge on Windows; elsewhere install Playwright Chromium first. Native helper checks require Windows and use synthetic credentials without opening application login screens.
+
+Development uses Rollup's official WebAssembly build, avoiding its platform-specific native parser dependency. This does not add a runtime dependency for plugin users.
 
 `plugins/dailyops/` contains the plugin source, `shared/` contains artwork, settings and Windows helpers, and `tools/` contains build and verification tools. Compatibility hooks for the optional companion remain in the shared code; its separate plugin implementation is not included here.
 

@@ -1,5 +1,13 @@
 # Changes
 
+## Windows Daily Toolkit 2.6.1.0 — 2026-10-22
+
+- Added a double-click Windows installer and ready-to-install ZIP. End users no longer need Git, Node.js, npm or a local build. Source checkouts can download the matching prebuilt release.
+- Checks the Stream Deck prerequisite, verifies package integrity/identity, backs up the previous plugin/profiles, preserves personal settings/caches, restarts the app and checks runtime startup. Failed installation rolls back the plugin and only the profiles created by that attempt.
+- Added a generic 15-key starter profile alongside Apps and Websites. The installer adds missing layouts for compatible detected devices without replacing existing profiles; repeat installs do not duplicate them.
+- Added beginner installation/update/recovery documentation and isolated installer tests.
+- Added a process-bound startup receipt after the Stream Deck SDK connection, so installation verifies a fresh connected plugin instead of relying on an old log. Development builds use Rollup's official WebAssembly package for portability.
+
 ## Windows Daily Toolkit 2.6.0.0 — 2026-10-17
 
 - Added coordinated automatic profile switching for separately installed VS Code, ChatGPT, Claude, thinkorswim and Fidelity Trader+ companions. Generic Open App remains the launcher; there are no app-specific launcher presets.

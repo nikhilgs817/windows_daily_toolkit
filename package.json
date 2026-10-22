@@ -13,7 +13,9 @@
     "test:native": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/verify-native-display.ps1",
     "test:credentials": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/verify-credentials.ps1 && node tools/verify-credential-transport.mjs",
     "validate": "streamdeck validate plugins/dailyops/com.dailyops.v2.sdPlugin",
-    "pack": "node tools/clean.mjs && streamdeck pack plugins/dailyops/com.dailyops.v2.sdPlugin --output dist --force"
+    "pack": "node tools/clean.mjs && streamdeck pack plugins/dailyops/com.dailyops.v2.sdPlugin --output dist --force",
+    "build:installer": "node tools/build-installer.mjs",
+    "test:installer": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File tools/test-installer.ps1"
   },
   "keywords": [],
   "author": "Daily Ops",
@@ -29,7 +31,7 @@
     "@types/node": "^22.20.5",
     "fflate": "^0.8.3",
     "playwright": "^1.64.1",
-    "rollup": "^4.64.5",
+    "rollup": "npm:@rollup/wasm-node@^4.64.12",
     "tslib": "^2.8.1",
     "typescript": "5.9"
   },
