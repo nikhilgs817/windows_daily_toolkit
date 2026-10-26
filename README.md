@@ -2,13 +2,13 @@
 
 ![Windows Daily Toolkit logo: blue toolbox with a white Windows mark, wrench and gear](docs/images/windows-daily-toolkit-logo.png)
 
-Customizable Windows controls for Elgato Stream Deck. Version **2.6.1.0** provides 13 visible animated actions for apps, websites, folders, monitors and everyday desktop controls, with a double-click Windows installer.
+Customizable Windows controls for Elgato Stream Deck. Version **2.6.2.0** provides 13 visible animated actions for apps, websites, folders, monitors and everyday desktop controls, with a double-click Windows installer.
 
 ![Animated Windows Daily Toolkit keys](docs/images/all-keys-animation.gif)
 
 ## Install
 
-1. Download **WindowsDailyToolkit-Installer-2.6.1.0.zip** from [the latest release](https://github.com/nikhilgs817/windows_daily_toolkit/releases/latest).
+1. Download **WindowsDailyToolkit-Installer-2.6.2.0.zip** from [the latest release](https://github.com/nikhilgs817/windows_daily_toolkit/releases/latest).
 2. Right-click the ZIP → **Extract All**, then open its **WindowsDailyToolkit-Installer** folder.
 3. Double-click **Install-WindowsDailyToolkit.cmd** and wait for the success message. Stream Deck restarts automatically.
 
@@ -110,7 +110,7 @@ npm run build:installer
 npm run test:installer
 ```
 
-The build writes `plugins/dailyops/com.dailyops.v2.sdPlugin/`; packaging writes `dist/com.dailyops.v2.streamDeckPlugin`. `build:installer` bundles that package, its checksum manifest, the PowerShell installer, CMD launcher and instructions into `dist/WindowsDailyToolkit-Installer-2.6.1.0.zip`. Run `pack` before building the installer. The installer test suite exercises isolated first-install, update, repeat-install, path-validation and rollback cases; it does not operate your real Stream Deck. Generated plugin folders, installers and dependencies are excluded from Git. Publish the installer ZIP, plugin package and `dist/installer-manifest.json` together as release assets.
+The build writes `plugins/dailyops/com.dailyops.v2.sdPlugin/`; packaging writes `dist/com.dailyops.v2.streamDeckPlugin`. `build:installer` bundles that package, its checksum manifest, the PowerShell installer, CMD launcher and instructions into `dist/WindowsDailyToolkit-Installer-2.6.2.0.zip`. Run `pack` before building the installer. The installer test suite exercises isolated first-install, update, repeat-install, path-validation and rollback cases; it does not operate your real Stream Deck. Generated plugin folders, installers and dependencies are excluded from Git. Publish the installer ZIP, plugin package and `dist/installer-manifest.json` together as release assets.
 
 The browser inspector checks use installed Edge on Windows; elsewhere install Playwright Chromium first. Native helper checks require Windows and use synthetic credentials without opening application login screens.
 

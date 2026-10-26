@@ -31,7 +31,11 @@ try{
  await router.follow();check('navigation recovers after a failed restore',displayed==='main');
  await Promise.all([router.follow('a'),router.follow('b'),router.follow('a')]);check('concurrent requests serialize without nested profiles',displayed==='a');
  a.close();await wait(()=>!router.peers.has('a'));await router.follow();check('stopped companion can recover through main',displayed==='main'&&events.includes('recover'));
- check('all five application identities are present',COMPANIONS.length===5);
+ check('all six application identities are present',COMPANIONS.length===6);
+ const tv=COMPANIONS.find(c=>c.name==='TradingView').selector;
+ check('TradingView desktop (Store package) is recognized',matchesApp(tv,'TradingView','C:\\Program Files\\WindowsApps\\TradingView.Desktop_2.9.0.0_x64__n534cwy3pjxzj\\TradingView.exe'));
+ check('TradingView desktop (classic install) is recognized',matchesApp(tv,'TradingView','C:\\Users\\me\\AppData\\Local\\Programs\\TradingView\\TradingView.exe'));
+ check('a browser tab titled TradingView never takes the profile',!matchesApp(tv,'chrome','C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'));
  const tos=COMPANIONS.find(c=>c.name==='thinkorswim').selector;
  check('thinkorswim Java runtime is recognized by its own path',matchesApp(tos,'javaw','C:\\Apps\\thinkorswim\\jre\\bin\\javaw.exe'));
  check('an unrelated Java application never takes the thinkorswim profile',!matchesApp(tos,'javaw','C:\\Apps\\Other\\javaw.exe'));

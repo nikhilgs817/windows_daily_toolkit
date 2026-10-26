@@ -5,6 +5,7 @@ export const COMPANIONS = [
 	{ uuid: "com.dailyops.claude.v1", name: "Claude", kinds: [] as string[], match: /\bclaude\b/i, selector: { names: ["Claude"], path: "(?:[\\\\/]Claude(?:_[^\\\\/]+)?[\\\\/]|[\\\\/]Anthropic[\\\\/])" } },
 	{ uuid: "com.dailyops.thinkorswim.v1", name: "thinkorswim", kinds: [] as string[], match: /thinkorswim/i, selector: { names: ["thinkorswim", "javaw", "java"], path: "[\\\\/]thinkorswim(?:[\\\\/]|\\.exe$)" } },
 	{ uuid: "com.dailyops.fidelitytrader.v1", name: "Fidelity Trader+", kinds: [] as string[], match: /Fidelity Trader\+|68D72461-B3DB-4FE2-AE47-50EF0FD7254F/i, selector: { names: ["Fidelity Trader+"], path: "[\\\\/]68D72461-B3DB-4FE2-AE47-50EF0FD7254F_" } },
+	{ uuid: "com.dailyops.tradingview.v1", name: "TradingView", kinds: [] as string[], match: /tradingview/i, selector: { names: ["TradingView"], path: "[\\\\/]TradingView" } },
 ];
 
 export function matchesApp(selector: AppSelector, name: string, path = ""): boolean {

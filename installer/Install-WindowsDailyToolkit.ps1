@@ -9,8 +9,8 @@ param(
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 $script:PluginId = 'com.dailyops.v2'
-$script:ReleaseVersion = '2.6.1.0'
-$script:ReleaseBase = 'https://github.com/nikhilgs817/windows_daily_toolkit/releases/download/v2.6.1'
+$script:ReleaseVersion = '2.6.2.0'
+$script:ReleaseBase = 'https://github.com/nikhilgs817/windows_daily_toolkit/releases/download/v2.6.2'
 $script:LogFile = $null
 
 function Write-Step([string]$Message) {

@@ -1,5 +1,9 @@
 # Changes
 
+## Windows Daily Toolkit 2.6.2.0 — 2026-10-26
+
+- Automatic profile switching now recognizes the TradingView desktop app (Store or classic install) and shows the separately installed TradingView Controls keys. Browser tabs are not matched.
+
 ## Windows Daily Toolkit 2.6.1.0 — 2026-10-22
 
 - Added a double-click Windows installer and ready-to-install ZIP. End users no longer need Git, Node.js, npm or a local build. Source checkouts can download the matching prebuilt release.
